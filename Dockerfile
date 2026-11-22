@@ -8,6 +8,17 @@ ENV ENV_FILE=/app/data/runtime.env \
     WEBUI_AUTO_BUILD=false \
     TRUST_X_FORWARDED_FOR=true
 
+# Fit a 0.5 GB / 1 vCPU service: size native thread pools to the service, not the host
+# (Railway hosts report 32-64 CPUs), cap glibc malloc arenas, and skip loading the
+# Feishu/Lark SDK unless a Feishu app is configured (see overlay/sitecustomize.py).
+ENV OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1 \
+    NUMEXPR_MAX_THREADS=1 \
+    MALLOC_ARENA_MAX=2 \
+    PYTHONPATH=/opt/railway
+COPY overlay/sitecustomize.py /opt/railway/sitecustomize.py
+
 COPY railway-start.sh /usr/local/bin/railway-start.sh
 RUN chmod 755 /usr/local/bin/railway-start.sh
 
