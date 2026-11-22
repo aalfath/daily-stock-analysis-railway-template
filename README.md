@@ -26,8 +26,10 @@ What the wrapper changes compared with the stock image:
   start and sets the admin password from `ADMIN_PASSWORD`, so nobody else can open the
   dashboard or claim the first-login password.
 - Settings and reports are kept on the volume, so they survive redeploys.
-- `MAX_WORKERS=1` on first boot, so a 0.5 GB service copes. Raise it in Settings on a
-  bigger plan.
+- Fits a 0.5 GB / 1 vCPU service (about 400 MB in use): `MAX_WORKERS=1` on first boot
+  (raise it in Settings on a bigger plan), native thread pools sized to one CPU, and the
+  Feishu/Lark SDK (about 130 MB) loaded only when `FEISHU_APP_ID` is set. Feishu webhook
+  notifications work without it; for the Feishu app bot, set `FEISHU_APP_ID` and restart.
 - If the web server stops, the container exits non-zero, so Railway restarts it.
 
 ## Variables
@@ -53,8 +55,9 @@ any of them can also be added as a Railway variable.
    and pick a time (the default time zone is `Asia/Shanghai`; set a `TZ` variable to change it).
 3. Run an analysis from the home page.
 
-Memory: the web UI idles at about 300 MB. A full analysis run needs more; upstream
-recommends 1 GB. On Railway's Free plan (0.5 GB) keep one worker and a short stock list.
+Memory: the service uses about 400 MB (tested with a 0.5 GB / 1 vCPU limit, including an
+analysis run). Upstream recommends 1 GB for full runs over long stock lists; on Railway's
+Free plan keep one worker and a short stock list.
 
 This software produces AI-generated analysis, not financial advice.
 
