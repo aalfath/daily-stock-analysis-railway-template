@@ -13,4 +13,4 @@ First version.
 - Settings file (`runtime.env`), SQLite database and reports on one volume at `/app/data`.
 - `LLM_API_KEY` / `LLM_MODEL` / `LLM_BASE_URL` mapped to upstream's provider variables.
 - Exits non-zero if the web server stops, so Railway restarts it.
-- Fits 0.5 GB: thread pools sized to one CPU, `MALLOC_ARENA_MAX=2`, Feishu/Lark SDK loaded only when `FEISHU_APP_ID` is set.
+- Lower memory: thread pools sized to one CPU, `MALLOC_ARENA_MAX=2`, Feishu/Lark SDK loaded only when `FEISHU_APP_ID` is set.
